@@ -1,0 +1,32 @@
+{
+  "name": "url-shortener-microservice",
+  "version": "1.0.0",
+  "description": "FreeCodeCamp APIs and Microservices Projects - URL Shortener Microservice",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i-anshuman/url-shortener-microservice.git"
+  },
+  "keywords": [
+    "URlShortener"
+  ],
+  "author": "Anshuman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/i-anshuman/url-shortener-microservice/issues"
+  },
+  "homepage": "https://github.com/i-anshuman/url-shortener-microservice#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.5",
+    "mongoose": "^5.9.4"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
+  }
+}
