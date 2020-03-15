@@ -2,8 +2,16 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
+app.use(express.static(__dirname + "/assets/"));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.get('/', (req, res) => {
-  res.send(`<h1>URL Shortener Microservice.</h1>`);
+  res.sendFile(__dirname + "/views/index.html");
 });
 
 const PORT = process.env.PORT || 3000;

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="FreeCodeCamp APIs and Microservices Projects - URL Shortener Microservice" />
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <title>URL Shortener Microservice</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>API Project: URL Shortener Microservice</h1>
+      </header>
+      <section>
+        <h3>User Stories:</h3>
+        <ol>
+          <li>
+            <p>
+              I can POST a URL to <code>[project_url]/api/shorturl/new</code> and I will receive a shortened URL in the JSON response.
+              <br />
+              <b>Example:</b> <code>{"original_url":"www.google.com","short_url":1}</code>
+            </p>
+          </li>
+          <li>
+            <p>
+              If I pass an invalid URL that doesn't follow the http(s)://www.example.com(/more/routes) format, the JSON response will contain an error like <code>{"error":"invalid URL"}</code>
+              <br />
+              <b>HINT:</b> to be sure that the submitted url points to a valid site you can use the function <code>dns.lookup(host, cb)</code> from the <em>dns core module</em>.
+            </p>
+          </li>
+          <li>
+            <p>When I visit the shortened URL, it will redirect me to my <em>original link</em>.</p>
+          </li>
+        </ol>
+      </section>
+      <section>
+        <h3>Short URL:</h3>
+        <ul>
+          <li><p><b>Example:</b> <code>POST [project_url]/api/shorturl/new - https://www.google.com</code></p></li>
+        </ul>
+        <div class="form-container">
+          <form method="POST" action="/api/shorturl/new">
+            <input type="url" name="url" id="urlInput" placeholder="Enter URL" />
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+          </form>
+        </div>
+      </section>
+      <section>
+        <h3>Example Usage:</h3>
+        <ul>
+          <li><p><a href="/api/shorturl/3">[project_url]/api/shorturl/3</a></p></li>
+          <li><p><a href="/api/shorturl/4">[project_url]/api/shorturl/4</a></p></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Will Redirect To:</h3>
+        <ul>
+          <li><p><a href="https://www.google.com" target="__blank">https://www.google.com</a></p></li>
+          <li><p><a href="https://www.freecodecamp.com" target="__blank">https://www.freecodecamp.com</a></p></li>
+        </ul>
+      </section>
+      <footer>
+        <p>By <a href="https://www.freecodecamp.org/" target="__blank">freeCodeCamp</a></p>
+        <p>
+          <span>Check live on <a href="https://i-anshuman-fcc-url-shortener-microservice.glitch.me" target="__blank">Glitch</a></span>
+          <span>Check source on <a href="https://github.com/i-anshuman/url-shortener-microservice" target="__blank">Github</a></span>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
