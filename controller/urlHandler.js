@@ -26,14 +26,18 @@ const verifyURL = (url) => {
   return true;
 }
 
-const shortenURL = (url) => {
+const shortenURL = (url, callback) => {
   if (!verifyURL(url)) {
-    return {error: "invalid URL"};
+    callback({error: "invalid URL"});
   }
-  return URLSchema.findOne({url: url}, (err, storedURL) => {
+  URLSchema.findOne({url: url}, (err, storedURL) => {
     if (err) return console.error(err);
     if (storedURL) {
-      return { original_url: storedURL.url, short_url: storedURL.short };
+      callback({ 
+        original_url: storedURL.url, 
+        short_url: storedURL.short,
+        clicks: storedURL.clicks
+      });
     }
     else {
       incrementCounter((count) => {
@@ -43,20 +47,23 @@ const shortenURL = (url) => {
         });
         newURL.save((err) => {
           if (err) return console.error(err);
-          return { original_url: url, short_url: count };
+          callback({ original_url: url, short_url: count });
         });
       });
     }
   });
 }
 
-const getShortURL = (short) => {
-  return URLSchema.findOne({ short: short }, (err, shortedURL) => {
+const getShortURL = (short, callback) => {
+  URLSchema.findOne({ short: short }, (err, shortedURL) => {
     if (err) return console.error(err);
     if (shortedURL) {
       shortedURL.clicks++;
       shortedURL.save();
-      //return shortedURL.url;
+      callback(shortedURL.url);
+    }
+    else {
+      callback(null);
     }
   });
 }

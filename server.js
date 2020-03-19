@@ -6,11 +6,11 @@ require('dotenv').config();
 
 app.use(express.static(__dirname + "/assets/"));
 app.use(bodyParser.urlencoded({extended: false}));
-mongoose.connect(process.env.MONGO_URL, { 
+mongoose.connect(process.env.MONGO_URL, {
+  useCreateIndex: true,
   useNewUrlParser: true,
-  useUnifiedTopology: true,
   useFindAndModify: false,
-  useCreateIndex: true
+  useUnifiedTopology: true
 });
 
 app.use((req, res, next) => {
@@ -19,25 +19,27 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-app.post('/api/shorturl/new', async (req, res) => {
+app.post('/api/shorturl/new', (req, res) => {
   const {shortenURL} = require('./controller/urlHandler');
-  const result = await shortenURL(req.body.url);
-  res.json(result);
+  shortenURL(req.body.url, (result) => {
+    res.json(result);
+  });
 });
 
-app.get('/api/shorturl/:key', async (req, res) => {
+app.get('/api/shorturl/:key', (req, res) => {
   const { getShortURL } = require('./controller/urlHandler');
-  const shortURL = await getShortURL(req.params.key);
-  if (shortURL) {
-    res.redirect(shortURL.url);
-  }
-  else {
-    res.json({ error: "No short URL found." });
-  }
+  getShortURL(req.params.key, (shortURL) => {
+    if (shortURL) {
+      res.redirect(shortURL);
+    }
+    else {
+      res.json({ error: "No short URL found." });
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3000;
