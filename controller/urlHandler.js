@@ -21,37 +21,51 @@ const incrementCounter = (callback) => {
   });
 }
 
-const verifyURL = (url) => {
-  //const protocol = /^http(s):$/i;
-  return true;
-}
-
 const shortenURL = (url, callback) => {
-  if (!verifyURL(url)) {
+  const protocolRegEx = /^https?:\/\/(.*)/i;
+  const hostnameRegEx = /^([a-z0-9\-_]+\.)+[a-z0-9\-_]+/i;
+  if (url.match(/\/$/i)) {
+    url = url.slice(0,-1);
+  }
+  const protocol = url.match(protocolRegEx);
+  if (!protocol) { 
     callback({error: "invalid URL"});
   }
-  URLSchema.findOne({url: url}, (err, storedURL) => {
-    if (err) return console.error(err);
-    if (storedURL) {
-      callback({ 
-        original_url: storedURL.url, 
-        short_url: storedURL.short,
-        clicks: storedURL.clicks
-      });
-    }
-    else {
-      incrementCounter((count) => {
-        const newURL = new URLSchema({
-          url: url,
-          short: count
-        });
-        newURL.save((err) => {
+  const hostname = protocol[1].match(hostnameRegEx);
+  if (hostname) {
+    dns.lookup(hostname[0], (err, adderss) => {
+      if (err) {
+        callback({error: "invalid URL"});
+      }
+      else {
+        URLSchema.findOne({url: url}, (err, storedURL) => {
           if (err) return console.error(err);
-          callback({ original_url: url, short_url: count });
+          if (storedURL) {
+            callback({ 
+              original_url: storedURL.url, 
+              short_url: storedURL.short,
+              clicks: storedURL.clicks
+            });
+          }
+          else {
+            incrementCounter((count) => {
+              const newURL = new URLSchema({
+                url: url,
+                short: count
+              });
+              newURL.save((err) => {
+                if (err) return console.error(err);
+                callback({ original_url: url, short_url: count });
+              });
+            });
+          }
         });
-      });
-    }
-  });
+      }
+    })
+  }
+  else {
+    callback({error: "invalid URL"});
+  }
 }
 
 const getShortURL = (short, callback) => {
